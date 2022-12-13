@@ -28,10 +28,10 @@ namespace DemoApi.Controllers
         }
        
         [HttpPost]
-        public async Task<ActionResult<MovieTbl>> Search(DateTime date)
+        public async Task<ActionResult<MovieTbl>> Search(MovieTbl m)
         {
             var movies = (from i in _context.MovieTbls
-                          where i.Date == date
+                          where i.Date == m.Date
                           select i);
             return Ok(await movies.ToListAsync());
         }
