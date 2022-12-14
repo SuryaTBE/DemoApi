@@ -45,33 +45,12 @@ namespace DemoApi.Controllers
         }
         // PUT: api/Movie/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutMovieTbl(int id, MovieTbl movieTbl)
+        [HttpPut]
+        public async Task<IActionResult> PutMovieTbl(MovieTbl movieTbl)
         {
-            if (id != movieTbl.MovieId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(movieTbl).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MovieTblExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            _context.MovieTbls.Update(movieTbl);
+            await _context.SaveChangesAsync();
+            return Ok();
         }
 
         // POST: api/Movie

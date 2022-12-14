@@ -46,8 +46,8 @@ namespace DemoApi.Controllers
             return Ok();
         }
         [HttpPost]
-        [Route("ProceedToPay")]
-        public async Task<ActionResult<OrderMasterTbl>> ProceedToPay(OrderMasterTbl om)
+        [Route("AddToOrderMaster")]
+        public async Task<ActionResult<OrderMasterTbl>> AddToOrderMaster(OrderMasterTbl om)
         {
             _db.OrderMasterTbls.Add(om);
             await _db.SaveChangesAsync();
@@ -91,6 +91,29 @@ namespace DemoApi.Controllers
             book=(from i in _db.BookingTbl
                   where i.UserId==booking.UserId select i).ToList();
             return Ok(book);
+        }
+        [HttpGet]
+        [Route("OrderListConvert")]
+        public async Task<ActionResult<OrderDetailTbl>> OrderListConvert()
+        {
+            List<OrderDetailTbl> od = new List<OrderDetailTbl>();
+            od =  _db.OrderDetails.ToList();
+            return Ok(od);
+        }
+        [HttpGet]
+        [Route("OrderDetailsGetById")]
+        public async Task<ActionResult<OrderDetailTbl>> OrderDetailsGetById(int id)
+        {
+            var od = _db.OrderDetails.Find(id);
+            return Ok(od);
+        }
+        [HttpPost]
+        [Route("CancelTicket")]
+        public async Task<ActionResult<OrderDetailTbl>> CancelTicket(OrderDetailTbl od)
+        {
+          _db.OrderDetails.Remove(od);
+            await _db.SaveChangesAsync();
+            return Ok();
         }
     }
 }
