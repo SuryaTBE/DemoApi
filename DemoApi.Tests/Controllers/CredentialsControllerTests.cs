@@ -3,6 +3,7 @@ using DemoApi.Models;
 using DemoApi.Tests.InMemoryDatabase;
 using FakeItEasy;
 using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,8 @@ namespace DemoApi.Tests.Controllers
             var credentials = new CredentialsController(dbcontext);
             AdminTbl admin=new AdminTbl()
             {
+                AdminId=101,
+                AdminName="Surya T",
                 Email = "1234@gmail.com",
                 Password = "1234"
             };
@@ -31,7 +34,9 @@ namespace DemoApi.Tests.Controllers
 
             //Assert
             result.Value.Should().NotBeNull();
+            result.Should().BeOfType<ActionResult<AdminTbl>>();
             dbcontext.AdminTbls.Should().HaveCount(1);
+            result.Value.Should().BeEquivalentTo(admin);
         }
         [Fact]
         public async Task RegisterTests()
@@ -52,7 +57,8 @@ namespace DemoApi.Tests.Controllers
             var result= await credentials.Register(user);
 
             //Assert
-            //result.Value.Should().NotBeNull();
+            result.Should().NotBeNull();
+            result.Should().BeOfType<ActionResult<UserTbl>>();
             dbcontext.UserTbls.Should().Contain(user);
             dbcontext.UserTbls.Should().HaveCount(3);
         }
@@ -74,6 +80,7 @@ namespace DemoApi.Tests.Controllers
 
             //Assert
             result.Value.Should().NotBeNull();
+            result.Should().BeOfType<ActionResult<UserTbl>>();
             dbcontext.UserTbls.Should().Contain(result.Value);
         }
     }

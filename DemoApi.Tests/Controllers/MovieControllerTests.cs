@@ -30,9 +30,7 @@ namespace DemoApi.Tests.Controllers
             //Assert
             result.Should().NotBeNull();
             result.Should().BeOfType<ActionResult<IEnumerable<MovieTbl>>>();
-            int actualresult=result.Value.Count();
-            int expresult = 2;
-            Assert.Equal(expresult, actualresult);
+            result.Value.Should().HaveCount(2);
 
         }
         [Fact]
